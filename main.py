@@ -13,9 +13,17 @@ pause = False
 
 clock = time.Clock()
 
-btn1 =  Button(window, screen_width, screen_height)
+def stop_game():
+    global game
+    game = False
+
+btn1 =  Button(window, screen_width, screen_height,stop_game)
 
 while game:
+
+    if pause:
+        btn1.click(e)
+
     for e in event.get():
         if e.type == QUIT:
             game = False
@@ -27,7 +35,7 @@ while game:
     
     if pause:
 
-        window.blit(background, (0,0))
+        window.blit(background_pause, (0,0))
         btn1.reset()
 
         display.update()
