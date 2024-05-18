@@ -1,21 +1,21 @@
 from pygame import *
 
 class Button:
-    def __init__ (self, window,screen_width, screen_height, onclick_function):
-        self.window = window
-        self.width = 70
-        self.height = 30
-        self.x = 100
-        self.y = 100
+    def __init__ (self, x, y, onclick_function, img_name):
+        
+        self.width = 150
+        self.height = 70
         self.onclick_function = onclick_function
 
-        font.init()
-        self.font1 = font.Font(None, 50)
-        self.rect = rect.Rect(self.x, self.y, self.width, self.height)
+        self.image  = image.load(img_name)
+        self.image  = transform.scale(self.image, (self.width, self.height))
 
-    def reset(self):
-        draw.rect(self.window, (255,255,255), rect.Rect(self.x, self.y, self.width, self.height))
-        self.window.blit(self.font1.render("Exit", True, (0, 0, 0)),(self.x, self.y))
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+    def reset(self, window):
+        window.blit(self.image, (self.rect.x, self.rect.y))
 
         
     def click(self, event):
