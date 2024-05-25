@@ -3,13 +3,23 @@ from button import Button
 
 
 map = """ 
-0 0 0 0 0 0 0 0 0 4
-1 1 0 1 0 0 0 0 0 4
-2 2 0 2 0 0 0 0 0 4
-3 3 0 3 3 3 3 3 0 4
-1 2 0 3 0 0 0 0 0 4
-1 2 0 3 0 0 0 0 0 4
-1 2 0 3 1 1 1 1 1 4
+1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 4
+1 0 0 0 0 0 0 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 4
+1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 4
+1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 4
+1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 0 0 0 0 0 0 1 4
+1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 4
+1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 4
+1 2 2 2 2 2 2 2 2 2 2 2 2 2 0 0 0 0 2 2 2 2 2 2 2 2 2 2 2 1 4
+1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 4
+1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 4
+1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 0 0 0 0 0 2 2 1 4
+1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 4
+1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 4
+1 2 2 2 2 2 2 0 0 0 0 0 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 4
+1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 4
+1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 4
+3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 4
  """
 
 
@@ -41,13 +51,19 @@ class Hero (sprite.Sprite):
     def reset(self):
         window.blit(self.image, (self.rect.x, self.rect.y))
 
+
+
+exit1 = Hero(200, 100, 80, 80, 0, "warer20001.png")
+exit2 = Hero(1400, 850, 30, 40, 0, "light.png")
+
 class Player_1(Hero):
     def move (self):
         keys = key.get_pressed()
         if keys [K_a] and self.rect.x > 5:
             self.rect.x -= self.speed
 
-        if keys [K_d] and self.rect.x < 1200:
+
+        if keys [K_d] and self.rect.x < screen_width:
             self.rect.x += self.speed
         if keys[K_SPACE]:
             self.jump=True
@@ -62,24 +78,44 @@ class Player_1(Hero):
                 self.jumpCount = 10
                 self.jump = False
 
-player_1 = Player_1 (400, 400, 100, 100, 5)
+player_1 = Player_1 (400, 850, 100, 100, 5)
+
+
+
+class Player_2(Hero):
+    def move (self):
+        keys = key.get_pressed()
+        if keys [K_LEFT] and self.rect.x > 5:
+            self.rect.x -= self.speed
+
+        if keys [K_RIGHT] and self.rect.x < screen_width:
+            self.rect.x += self.speed
+        if keys[K_UP]:
+            self.jump=True
+        
+        if(not self.jump):
+            self.rect.y += 3
+        else:
+            if self.jumpCount >= -10:
+                self.rect.y -= (self.jumpCount * abs(self.jumpCount)) * 0.5
+                self.jumpCount -= 1
+            else: 
+                self.jumpCount = 10
+                self.jump = False
+
+player_2 = Player_2 (100, 100, 100, 100, 5, "Players_2.jpg")
 
 map_elements = []
-x=0
-y=670
-for i in range(0, int(screen_width/50)+1):
-   
-    w = Hero(x, y,50, 50, 0, f"Map_tile_35.png"  )
-    x+=50
-    map_elements.append(w)
-
-   
 
 
-x=0
-y=500
+x=screen_width
+y=screen_height
 
-for el in map.split():
+map = map.split()
+map.reverse()
+
+
+for el in map:
     x += 50
     if el == "1":
         w = Hero(x, y, 50, 50,0, "Map_tile_05.png")
@@ -93,7 +129,7 @@ for el in map.split():
         w = Hero(x, y, 50, 50,0, "Map_tile_35.png")
         map_elements.append(w)
     if el == "4":
-        y += 50
+        y -= 50
         x=0
 
 
@@ -111,6 +147,11 @@ def play_game():
 
 btn1 =  Button(570, 450, stop_game, "button_EXIT.jpg")
 btn2 =  Button(570, 380, play_game, "button_PLAY.jpg")
+
+font1 = font.Font(None, 80)
+
+
+finish = False
 
 while game:
     for e in event.get():
@@ -141,11 +182,36 @@ while game:
 
     for i in map_elements:
         if player_1.rect.colliderect(i.rect):
-            player_1.rect.y=670-50
-        i.reset()
-    player_1.reset()
-    player_1.move()    
+            player_1.rect.y=i.rect.y - 50
+            #if player_1.rect.bottom<=i.rect.bottom and player_1.rect.bottom>=i.rect.top:
+                #player_1.rect.bottom=i.rect.top
 
+
+        if player_2.rect.colliderect(i.rect):
+            player_2.rect.y=i.rect.y - 50
+
+        
+        i.reset()
+
+    if player_1.rect.colliderect(exit1.rect) and player_2.rect.colliderect(exit2.rect):
+        finish = True
+
+    if finish == True:
+        font1.render
+        window.blit(font1.render("You Win", True, (255, 255, 255)), (647, 500))
+
+
+
+    player_1.reset()
+    player_1.move()  
+
+
+    player_2.reset()
+    player_2.move()    
+  
+    exit1.reset()
+    exit2.reset()
+    
 
     display.update()
     clock.tick(60)
